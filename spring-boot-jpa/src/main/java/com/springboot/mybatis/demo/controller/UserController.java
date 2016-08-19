@@ -1,15 +1,15 @@
 package com.springboot.mybatis.demo.controller;
 
+import com.alibaba.fastjson.JSONObject;
 import com.springboot.mybatis.demo.model.User;
 import com.springboot.mybatis.demo.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by sen on 2016/8/17.
@@ -26,12 +26,12 @@ public class UserController {
         return userService.queryUser();
     }
 
-    @RequestMapping("/saveUser")
+    @RequestMapping(value = "/saveUser",method = RequestMethod.POST)
     @ResponseBody
-    public String saveUser(@RequestParam("name") String name, @RequestParam("age") String age) {
+    public String saveUser(@RequestBody JSONObject jsonObject) {
         User user=new User();
-        user.setName(name);
-        user.setAge(Integer.valueOf(age));
+        user.setName(jsonObject.get("name").toString());
+        user.setAge(Integer.valueOf(jsonObject.get("age").toString()));
         try {
             userService.saveUser(user);
             return "成功";
